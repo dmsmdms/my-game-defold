@@ -1,7 +1,8 @@
 local color_green = vmath.vector4(0.149, 0.729, 0.588, 1)
 local color_red = vmath.vector4(0.949, 0.333, 0.4, 1)
 
-local function set_kline(info, c)
+local function set_kline(info)
+	local c = info.candles[#info.candles]
 	local diff = c.close - c.open
 	local color, rot_z, text
 	if diff > 0 then
@@ -26,15 +27,15 @@ local function set_kline(info, c)
 	gui.set_rotation(info.candle_arrow, vmath.vector3(0, 0, rot_z))
 end
 
-local function draw_candles(info, candles)
+local function draw_candles(info)
 	local max_price, min_price = -math.huge, math.huge
-	for _, c in ipairs(candles) do
+	for _, c in ipairs(info.candles) do
 		max_price = math.max(max_price, c.high)
 		min_price = math.min(min_price, c.low)
 	end
 
 	local scale = info.max_height / (max_price - min_price)
-	for i, c in ipairs(candles) do
+	for i, c in ipairs(info.candles) do
 		local x = 2 * (i - 0.5) * info.rect_width
 		local y_open = (c.open - min_price) * scale
 		local y_close = (c.close - min_price) * scale
@@ -72,6 +73,8 @@ local function draw_candles(info, candles)
 		gui.set_position(line, vmath.vector3(x, y_low + h / 2.0 - info.max_height, 0))
 		gui.set_size(line, vmath.vector3(info.line_width, h, 0))
 	end
+
+	set_kline(info)
 end
 
 local function init_graph(self, sym)
@@ -89,7 +92,7 @@ local function init_graph(self, sym)
 		tmpl_rect = tmpl_rect,
 		tmpl_line = tmpl_line,
 		rect_arr = {},
-		line_arr = {}
+		line_arr = {},
 	}
 	self.info = info
 
@@ -107,7 +110,7 @@ local function init_graph(self, sym)
 	http.request(url, "GET", function(self, id, response)
 		if response.status == 200 then
 			local data = json.decode(response.response)
-			local candles = {}
+			info.candles = {}
 			for i, c in ipairs(data) do
 				local candle = {
 					open = tonumber(c[2]),
@@ -115,11 +118,12 @@ local function init_graph(self, sym)
 					low = tonumber(c[4]),
 					close = tonumber(c[5])
 				}
-				table.insert(candles, candle)
+				info.prev_open_price = candle.open
+				table.insert(info.candles, candle)
 			end
-			draw_candles(info, candles)
+			draw_candles(info)
 
-			url = string.format("wss://stream.binance.com:9443/stream?streams=%susdt@kline_1m", sym)
+			url = string.format("wss://stream.binance.com:9443/stream?streams=%susdt@kline_%s", sym, interval)
 			websocket.connect(url, nil, function(self, conn, data)
 				if data.event == websocket.EVENT_MESSAGE then
 					local msg = json.decode(data.message)
@@ -130,7 +134,14 @@ local function init_graph(self, sym)
 						low = tonumber(k.l),
 						close = tonumber(k.c)
 					}
-					set_kline(info, candle)
+					if info.prev_open_price ~= candle.open then
+						table.remove(info.candles, 1)
+						table.insert(info.candles, candle)
+						info.prev_open_price = candle.open
+					else
+						info.candles[#info.candles] = candle
+					end
+					draw_candles(info)
 				elseif data.event == websocket.EVENT_ERROR then
 					print(string.format("WS error: %s", data.message))
 				end

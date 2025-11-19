@@ -7,6 +7,12 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
+  id: "btc/grad"
+  parent: "btc"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
   id: "btc/left"
   parent: "btc"
   template_node_child: true
@@ -85,13 +91,13 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  id: "btc/tmpl_rect"
+  id: "btc/tmpl_line"
   parent: "btc/graph"
   template_node_child: true
 }
 nodes {
   type: TYPE_BOX
-  id: "btc/tmpl_line"
+  id: "btc/tmpl_rect"
   parent: "btc/graph"
   template_node_child: true
 }
@@ -103,6 +109,12 @@ nodes {
   id: "eth"
   inherit_alpha: true
   template: "/main/tmpl_sym.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "eth/grad"
+  parent: "eth"
+  template_node_child: true
 }
 nodes {
   type: TYPE_BOX
@@ -188,13 +200,13 @@ nodes {
 }
 nodes {
   type: TYPE_BOX
-  id: "eth/tmpl_rect"
+  id: "eth/tmpl_line"
   parent: "eth/graph"
   template_node_child: true
 }
 nodes {
   type: TYPE_BOX
-  id: "eth/tmpl_line"
+  id: "eth/tmpl_rect"
   parent: "eth/graph"
   template_node_child: true
 }
