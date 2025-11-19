@@ -1,0 +1,272 @@
+fonts {
+  name: "main24"
+  font: "/assets/main24.font"
+}
+textures {
+  name: "main"
+  texture: "/assets/main.atlas"
+}
+nodes {
+  position {
+    x: 50.0
+    y: 1100.0
+  }
+  size {
+    x: 300.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "left"
+  pivot: PIVOT_NW
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    y: -50.0
+  }
+  scale {
+    x: 0.3
+    y: 0.3
+  }
+  type: TYPE_BOX
+  texture: "main/btc256"
+  id: "icon"
+  pivot: PIVOT_W
+  parent: "left"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 100.0
+    y: -30.0
+  }
+  size {
+    x: 200.0
+    y: 30.0
+  }
+  type: TYPE_TEXT
+  text: "BTC Bitcoin"
+  font: "main24"
+  id: "name"
+  pivot: PIVOT_W
+  parent: "left"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 100.0
+    y: -60.0
+  }
+  size {
+    x: 150.0
+    y: 30.0
+  }
+  color {
+    x: 0.302
+    y: 0.302
+    z: 0.302
+  }
+  type: TYPE_TEXT
+  text: "103,800.81"
+  font: "main24"
+  id: "price"
+  pivot: PIVOT_W
+  parent: "left"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 610.0
+    y: 1100.0
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  type: TYPE_BOX
+  id: "right"
+  pivot: PIVOT_NE
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  position {
+    x: -50.0
+    y: -20.0
+  }
+  size {
+    x: 100.0
+    y: 40.0
+  }
+  type: TYPE_BOX
+  id: "status_bg"
+  parent: "right"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  size {
+    x: 100.0
+    y: 40.0
+  }
+  color {
+    x: 0.0
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  text: "PUMP\n"
+  ""
+  font: "main24"
+  id: "status_text"
+  parent: "status_bg"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: -110.0
+    y: -60.0
+  }
+  size {
+    x: 240.0
+    y: 30.0
+  }
+  type: TYPE_BOX
+  id: "candle_box"
+  parent: "right"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+  visible: false
+}
+nodes {
+  size {
+    x: 150.0
+    y: 30.0
+  }
+  color {
+    x: 0.302
+    y: 0.302
+    z: 0.302
+  }
+  type: TYPE_TEXT
+  text: "+1240,08$"
+  font: "main24"
+  id: "candle_price"
+  pivot: PIVOT_E
+  parent: "candle_box"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 20.0
+  }
+  scale {
+    x: 0.7
+    y: 0.7
+  }
+  type: TYPE_BOX
+  texture: "main/arrow32"
+  id: "candle_arrow"
+  parent: "candle_box"
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    x: 40.0
+  }
+  size {
+    x: 90.0
+    y: 30.0
+  }
+  color {
+    x: 0.6
+    y: 0.0
+    z: 0.0
+  }
+  type: TYPE_TEXT
+  text: "1.18%"
+  font: "main24"
+  id: "candle_percent"
+  pivot: PIVOT_W
+  parent: "candle_box"
+  inherit_alpha: true
+}
+nodes {
+  position {
+    x: 40.0
+    y: 1000.0
+  }
+  size {
+    x: 560.0
+    y: 420.0
+  }
+  type: TYPE_BOX
+  id: "graph"
+  pivot: PIVOT_NW
+  inherit_alpha: true
+  size_mode: SIZE_MODE_AUTO
+}
+nodes {
+  position {
+    y: -210.0
+  }
+  scale {
+    x: 0.5
+    y: 0.5
+  }
+  size {
+    x: 200.0
+    y: 100.0
+  }
+  color {
+    x: 0.302
+    y: 0.302
+    z: 0.302
+  }
+  type: TYPE_TEXT
+  text: ". . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . "
+  font: "main24"
+  id: "dots"
+  pivot: PIVOT_W
+  parent: "graph"
+  inherit_alpha: true
+}
+nodes {
+  size {
+    x: 5.0
+    y: 100.0
+  }
+  color {
+    x: 0.965
+    y: 0.298
+    z: 0.349
+  }
+  type: TYPE_BOX
+  id: "tmpl_rect"
+  parent: "graph"
+  inherit_alpha: true
+  enabled: false
+}
+nodes {
+  size {
+    x: 1.0
+    y: 100.0
+  }
+  color {
+    x: 0.31
+    y: 0.29
+    z: 0.306
+  }
+  type: TYPE_BOX
+  id: "tmpl_line"
+  parent: "graph"
+  inherit_alpha: true
+  enabled: false
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

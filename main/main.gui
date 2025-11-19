@@ -1,0 +1,202 @@
+script: "/main/main.gui_script"
+nodes {
+  type: TYPE_TEMPLATE
+  id: "btc"
+  inherit_alpha: true
+  template: "/main/tmpl_sym.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "btc/left"
+  parent: "btc"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btc/icon"
+  parent: "btc/left"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "btc/name"
+  parent: "btc/left"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "btc/price"
+  parent: "btc/left"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btc/right"
+  parent: "btc"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btc/status_bg"
+  parent: "btc/right"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "btc/status_text"
+  parent: "btc/status_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btc/candle_box"
+  parent: "btc/right"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "btc/candle_price"
+  parent: "btc/candle_box"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btc/candle_arrow"
+  parent: "btc/candle_box"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "btc/candle_percent"
+  parent: "btc/candle_box"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btc/graph"
+  parent: "btc"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "btc/dots"
+  parent: "btc/graph"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btc/tmpl_rect"
+  parent: "btc/graph"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "btc/tmpl_line"
+  parent: "btc/graph"
+  template_node_child: true
+}
+nodes {
+  position {
+    y: -550.0
+  }
+  type: TYPE_TEMPLATE
+  id: "eth"
+  inherit_alpha: true
+  template: "/main/tmpl_sym.gui"
+}
+nodes {
+  type: TYPE_BOX
+  id: "eth/left"
+  parent: "eth"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  texture: "main/eth256"
+  id: "eth/icon"
+  parent: "eth/left"
+  overridden_fields: 9
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  text: "ETH Ethereum"
+  id: "eth/name"
+  parent: "eth/left"
+  overridden_fields: 8
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "eth/price"
+  parent: "eth/left"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "eth/right"
+  parent: "eth"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "eth/status_bg"
+  parent: "eth/right"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "eth/status_text"
+  parent: "eth/status_bg"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "eth/candle_box"
+  parent: "eth/right"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "eth/candle_price"
+  parent: "eth/candle_box"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "eth/candle_arrow"
+  parent: "eth/candle_box"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "eth/candle_percent"
+  parent: "eth/candle_box"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "eth/graph"
+  parent: "eth"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_TEXT
+  id: "eth/dots"
+  parent: "eth/graph"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "eth/tmpl_rect"
+  parent: "eth/graph"
+  template_node_child: true
+}
+nodes {
+  type: TYPE_BOX
+  id: "eth/tmpl_line"
+  parent: "eth/graph"
+  template_node_child: true
+}
+material: "/builtins/materials/gui.material"
+adjust_reference: ADJUST_REFERENCE_PARENT

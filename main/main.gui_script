@@ -1,0 +1,183 @@
+local color_green = vmath.vector4(0.149, 0.729, 0.588, 1)
+local color_red = vmath.vector4(0.949, 0.333, 0.4, 1)
+
+local function set_kline(info, c)
+	local diff = c.close - c.open
+	local color, rot_z, text
+	if diff > 0 then
+		text = "PUMP"
+		rot_z = 0
+		color = color_green
+	else
+		text = "DUMP"
+		rot_z = 180
+		color = color_red
+	end
+
+	gui.set_text(info.status_text, text)
+	gui.set_text(info.price, c.close)
+	gui.set_text(info.candle_price, string.format("%.2f$", diff))
+	gui.set_text(info.candle_percent, string.format("%.2f%%", 100 * diff / c.open))
+
+	gui.set_color(info.status_bg, color)
+	gui.set_color(info.candle_arrow, color)
+	gui.set_color(info.candle_percent, color)
+
+	gui.set_rotation(info.candle_arrow, vmath.vector3(0, 0, rot_z))
+end
+
+local function draw_candles(info, candles)
+	local max_price, min_price = -math.huge, math.huge
+	for _, c in ipairs(candles) do
+		max_price = math.max(max_price, c.high)
+		min_price = math.min(min_price, c.low)
+	end
+
+	local scale = info.max_height / (max_price - min_price)
+	for i, c in ipairs(candles) do
+		local x = 2 * (i - 0.5) * info.rect_width
+		local y_open = (c.open - min_price) * scale
+		local y_close = (c.close - min_price) * scale
+		local y_high = (c.high - min_price) * scale
+		local y_low = (c.low - min_price) * scale
+
+		local rect
+		if i > #info.rect_arr then
+			rect = gui.clone(info.tmpl_rect)
+			gui.set_enabled(rect, true)
+			table.insert(info.rect_arr, rect)
+		else
+			rect = info.rect_arr[i]
+		end
+
+		local y = y_open + (y_close - y_open) / 2.0 - info.max_height
+		gui.set_position(rect, vmath.vector3(x, y, 0))
+		gui.set_size(rect, vmath.vector3(info.rect_width, math.abs(y_close - y_open), 0))
+		if c.close >= c.open then
+			gui.set_color(rect, vmath.vector4(0, 1, 0, 1))
+		else
+			gui.set_color(rect, vmath.vector4(1, 0, 0, 1))
+		end
+
+		local line
+		if i > #info.line_arr then
+			line = gui.clone(info.tmpl_line)
+			gui.set_enabled(line, true)
+			table.insert(info.line_arr, line)
+		else
+			line = info.line_arr[i]
+		end
+
+		local h = y_high - y_low
+		gui.set_position(line, vmath.vector3(x, y_low + h / 2.0 - info.max_height, 0))
+		gui.set_size(line, vmath.vector3(info.line_width, h, 0))
+	end
+end
+
+local function init_graph(self, sym)
+	local path = sym .. "/"
+	local graph = gui.get_node(path .. "graph")
+	local graph_size = gui.get_size(graph)
+	local tmpl_rect = gui.get_node(path .. "tmpl_rect")
+	local tmpl_rect_size = gui.get_size(tmpl_rect)
+	local tmpl_line = gui.get_node(path .. "tmpl_line")
+	local tmpl_line_size = gui.get_size(tmpl_line)
+	local info = {
+		max_height = graph_size.y,
+		rect_width = tmpl_rect_size.x,
+		line_width = tmpl_line_size.x,
+		tmpl_rect = tmpl_rect,
+		tmpl_line = tmpl_line,
+		rect_arr = {},
+		line_arr = {}
+	}
+	self.info = info
+
+	info.status_text = gui.get_node(path .. "status_text")
+	info.price = gui.get_node(path .. "price")
+	info.status_bg = gui.get_node(path .. "status_bg")
+	info.candle_price = gui.get_node(path .. "candle_price")
+	info.candle_arrow = gui.get_node(path .. "candle_arrow")
+	info.candle_percent = gui.get_node(path .. "candle_percent")
+	
+	local interval = "15m"
+	local limit = (graph_size.x / ( 2 * tmpl_rect_size.x))
+	local url = string.format("https://api.binance.com/api/v3/klines?symbol=%sUSDT&interval=%s&limit=%d",
+		string.upper(sym), interval, limit)
+	http.request(url, "GET", function(self, id, response)
+		if response.status == 200 then
+			local data = json.decode(response.response)
+			local candles = {}
+			for i, c in ipairs(data) do
+				local candle = {
+					open = tonumber(c[2]),
+					high = tonumber(c[3]),
+					low = tonumber(c[4]),
+					close = tonumber(c[5])
+				}
+				table.insert(candles, candle)
+			end
+			draw_candles(info, candles)
+
+			url = string.format("wss://stream.binance.com:9443/stream?streams=%susdt@kline_1m", sym)
+			websocket.connect(url, nil, function(self, conn, data)
+				if data.event == websocket.EVENT_MESSAGE then
+					local msg = json.decode(data.message)
+					local k = msg.data.k
+					local candle = {
+						open = tonumber(k.o),
+						high = tonumber(k.h),
+						low = tonumber(k.l),
+						close = tonumber(k.c)
+					}
+					set_kline(info, candle)
+				elseif data.event == websocket.EVENT_ERROR then
+					print(string.format("WS error: %s", data.message))
+				end
+			end)
+		else
+			print(string.format("HTTP status %d: %s", response.status, response.message))
+		end
+	end)
+end
+
+function init(self)
+	init_graph(self, "btc")
+	init_graph(self, "eth")
+end
+
+function final(self)
+	-- Add finalization code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function update(self, dt)
+	-- Add update code here
+	-- Learn more: https://defold.com/manuals/script/
+	-- Remove this function if not needed
+end
+
+function on_message(self, message_id, message, sender)
+	-- Add message-handling code here
+	-- Learn more: https://defold.com/manuals/message-passing/
+	-- Remove this function if not needed
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here. The game object this script is attached to
+	-- must have acquired input focus:
+	--
+	--    msg.post(".", "acquire_input_focus")
+	--
+	-- All mapped input bindings will be received. Mouse and touch input will
+	-- be received regardless of where on the screen it happened.
+	-- Learn more: https://defold.com/manuals/input/
+	-- Remove this function if not needed
+end
+
+function on_reload(self)
+	-- Add reload-handling code here
+	-- Learn more: https://defold.com/manuals/hot-reload/
+	-- Remove this function if not needed
+end

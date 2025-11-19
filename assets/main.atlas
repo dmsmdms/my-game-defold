@@ -1,0 +1,10 @@
+images {
+  image: "/assets/btc256.png"
+}
+images {
+  image: "/assets/eth256.png"
+}
+images {
+  image: "/assets/arrow32.png"
+}
+extrude_borders: 2
