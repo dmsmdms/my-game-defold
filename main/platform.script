@@ -1,0 +1,32 @@
+local function draw_platforms(self, kline)
+	local max_price, min_price = -math.huge, math.huge
+	for _, c in ipairs(kline) do
+		max_price = math.max(max_price, c.high)
+		min_price = math.min(min_price, c.low)
+	end
+
+	for i, c in ipairs(kline) do
+		local go = factory.create("#factory")
+	end
+end
+
+function init(self)
+end
+
+function on_message(self, message_id, message, sender)
+	if message_id == hash("kline") then
+		draw_platforms(self, message)
+	end
+end
+
+function on_input(self, action_id, action)
+	-- Add input-handling code here. The game object this script is attached to
+	-- must have acquired input focus:
+	--
+	--    msg.post(".", "acquire_input_focus")
+	--
+	-- All mapped input bindings will be received. Mouse and touch input will
+	-- be received regardless of where on the screen it happened.
+	-- Learn more: https://defold.com/manuals/input/
+	-- Remove this function if not needed
+end

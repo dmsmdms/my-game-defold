@@ -7,4 +7,10 @@ images {
 images {
   image: "/assets/arrow32.png"
 }
+images {
+  image: "/assets/cube64.png"
+}
+images {
+  image: "/assets/platform128.png"
+}
 extrude_borders: 2

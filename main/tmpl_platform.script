@@ -1,0 +1,6 @@
+function update(self, dt)
+	local pos = go.get_position()
+	if pos.x < -400 then
+		go.delete()
+	end
+end

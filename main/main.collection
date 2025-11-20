@@ -1,4 +1,13 @@
 name: "main"
+collection_instances {
+  id: "game"
+  collection: "/main/game.collection"
+  position {
+    x: 320.0
+    y: 100.0
+    z: 0.5
+  }
+}
 scale_along_z: 0
 embedded_instances {
   id: "gui"

@@ -4,6 +4,7 @@ dependencies#0 = https://github.com/defold/extension-websocket/archive/master.zi
 
 [bootstrap]
 main_collection = /main/main.collectionc
+render = /materials/main.renderc
 
 [input]
 game_binding = /builtins/input/all.input_bindingc

@@ -75,6 +75,12 @@ local function draw_candles(info)
 	end
 
 	set_kline(info)
+
+	local msg_data = {}
+	for i = 1, 6 do
+		msg_data[i] = info.candles[#info.candles + i - 6]
+	end
+	msg.post("/game/platform#platform", "kline", msg_data)
 end
 
 local function init_graph(self, sym)
